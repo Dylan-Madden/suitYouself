@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-//not active at the moment but will be by 2026!!!
+/// not active at the moment but will be by 2026!!!
 struct LoungeView: View {
     var body: some View {
         VStack {

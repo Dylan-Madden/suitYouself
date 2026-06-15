@@ -1,15 +1,15 @@
 import SwiftUI
 
-//view of user picking the color of an item
+/// view of user picking the color of an item
 struct ColorSelectionView: View {
-    var type: ClothingType //clothing type
-    var startingColor: Color //always starts blank
+    var type: ClothingType // clothing type
+    var startingColor: Color // always starts blank
     var onColorPicked: (Color) -> Void
 
-    @Environment(\.dismiss) var dismiss //to dismiss the view
-    @State private var selectedColor: Color //picked color
+    @Environment(\.dismiss) var dismiss // to dismiss the view
+    @State private var selectedColor: Color // picked color
 
-    //initializes all the vars (completion handler)
+    /// initializes all the vars (completion handler)
     init(type: ClothingType, startingColor: Color, onColorPicked: @escaping (Color) -> Void) {
         self.type = type
         self.startingColor = startingColor
@@ -23,19 +23,19 @@ struct ColorSelectionView: View {
                 .font(.title)
                 .padding(.top)
 
-            //color pciker
+            // color pciker
             ColorPicker("Select color", selection: $selectedColor, supportsOpacity: false)
                 .labelsHidden()
                 .scaleEffect(1.5)
                 .padding()
 
-            //save button that triggers the callback and dismisses the whole view and brings user back to the suit
+            // save button that triggers the callback and dismisses the whole view and brings user back to the suit
             Button("Save Color") {
                 onColorPicked(selectedColor)
                 dismiss()
             }
             .padding()
-            //.frame(maxWidth: .infinity)
+            // .frame(maxWidth: .infinity)
             .background(Color(red: 0.18, green: 0.25, blue: 0.50))
             .foregroundColor(.white)
             .cornerRadius(12)

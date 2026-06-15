@@ -5,7 +5,7 @@ struct StyleSelectorButton: View {
     var imageName: String
     var color: Color
     // Remove the action parameter since NavigationLink will handle navigation
-    
+
     var body: some View {
         VStack(spacing: 10) {
             Image(systemName: imageName)
@@ -13,7 +13,7 @@ struct StyleSelectorButton: View {
                 .scaledToFit()
                 .frame(width: 60, height: 60)
                 .foregroundColor(.white)
-            
+
             Text(title)
                 .font(.headline)
                 .foregroundColor(.white)

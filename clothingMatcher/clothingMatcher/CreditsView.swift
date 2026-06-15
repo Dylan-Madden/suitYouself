@@ -7,19 +7,20 @@
 
 import SwiftUI
 
-//Showing credits to the supporters
+/// Showing credits to the supporters
 struct CreditsView: View {
-    @Environment(\.dismiss) var dismiss //used to dismiss the view (not always needed)
+    @Environment(\.dismiss) var dismiss // used to dismiss the view (not always needed)
 
     var body: some View {
         ZStack {
-            //background like always
+            // background like always
             LinearGradient(
-                gradient: Gradient(colors: [Color.gradientStart, Color.gradientEnd]),startPoint: .top, endPoint: .bottom)
+                gradient: Gradient(colors: [Color.gradientStart, Color.gradientEnd]), startPoint: .top, endPoint: .bottom
+            )
             .ignoresSafeArea()
 
             VStack(spacing: 20) {
-                //title for credits
+                // title for credits
                 Text("Credits")
                     .font(.largeTitle)
                     .foregroundColor(.black)
@@ -36,4 +37,3 @@ struct CreditsView: View {
         .navigationTitle("Credits")
     }
 }
-

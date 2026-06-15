@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-//not active at the moment but will be by 2026!!!
+/// not active at the moment but will be by 2026!!!
 struct CasualView: View {
     var body: some View {
         VStack {
@@ -19,7 +19,6 @@ struct CasualView: View {
         .navigationTitle("Casual")
     }
 }
-
 
 #Preview {
     CasualView()

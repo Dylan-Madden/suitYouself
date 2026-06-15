@@ -140,8 +140,8 @@ struct SuitView: View {
         }
     }
 
-    // Checks each clothing layer in priority order (smallest/thinnest first) and returns
-    // the first type whose pixel at the tap location is non-transparent.
+    /// Checks each clothing layer in priority order (smallest/thinnest first) and returns
+    /// the first type whose pixel at the tap location is non-transparent.
     private func hitTest(at tapPoint: CGPoint, in frameSize: CGSize) -> ClothingType? {
         guard let referenceImage = UIImage(named: "outlineTake5") else { return nil }
         let imageSize = referenceImage.size
@@ -155,11 +155,11 @@ struct SuitView: View {
         )
 
         let priority: [(ClothingType, String)] = [
-            (.belt,   "beltTake5"),
-            (.tie,    "tieTake5"),
-            (.shoes,  "shoesTake5"),
-            (.shirt,  "shirtTake5"),
-            (.pants,  "pantsTake5"),
+            (.belt, "beltTake5"),
+            (.tie, "tieTake5"),
+            (.shoes, "shoesTake5"),
+            (.shirt, "shirtTake5"),
+            (.pants, "pantsTake5"),
             (.blazer, "blazerTake5"),
         ]
 
@@ -171,7 +171,7 @@ struct SuitView: View {
         return nil
     }
 
-    // Renders a single 1×1 CGContext at the target coordinate and checks the alpha channel.
+    /// Renders a single 1×1 CGContext at the target coordinate and checks the alpha channel.
     private func isPixelOpaque(imageName: String, at point: CGPoint) -> Bool {
         guard let uiImage = UIImage(named: imageName) else { return false }
         let size = uiImage.size

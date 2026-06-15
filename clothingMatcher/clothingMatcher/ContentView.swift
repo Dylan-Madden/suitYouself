@@ -7,15 +7,15 @@
 
 import SwiftUI
 
-//Initial view of the app that welcomes the user and offers naviatgation to either select styles or to see credits
+/// Initial view of the app that welcomes the user and offers naviatgation to either select styles or to see credits
 struct ContentView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                //Background
-                LinearGradient(colors: [Color.gradientStart.opacity(0.7), Color.gradientEnd.opacity(0.7)],startPoint: .top,endPoint: .bottom).ignoresSafeArea()
+                // Background
+                LinearGradient(colors: [Color.gradientStart.opacity(0.7), Color.gradientEnd.opacity(0.7)], startPoint: .top, endPoint: .bottom).ignoresSafeArea()
 
-               //title
+                // title
                 VStack(spacing: 30) {
                     Text("Welcome to Suit Yourself")
                         .font(.largeTitle)
@@ -32,7 +32,7 @@ struct ContentView: View {
 
                     Text("Get AI powered feedback based on your inputs!!!")
 
-                    //button to start the outfit building
+                    // button to start the outfit building
                     NavigationLink(destination: StyleSelectionView()) {
                         Text("Start")
                             .font(.title2)
@@ -45,7 +45,7 @@ struct ContentView: View {
                     .navigationBarBackButtonHidden(true)
                     .padding(.horizontal)
 
-                    //view credits
+                    // view credits
                     NavigationLink(destination: CreditsView()) {
                         Text("Credits")
                             .font(.title2)
