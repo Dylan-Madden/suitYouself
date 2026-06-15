@@ -13,54 +13,35 @@ struct StyleSelectionView: View {
                         //the fancy button (only one that is fully active)
                         HStack {
                             NavigationLink(destination: SuitView()) {
-                                StyleSelectorButton(title: "Fancy", imageName: "person.fill", color: .purple)
+                                StyleSelectorButton(title: "Fancy", imageName: "person.fill", color: Color(red: 0.20, green: 0.20, blue: 0.25))
                             }
                             Text("Fancy is used for suits and other clothing used for formal events.")
                         }
                         //casual view (not finished)
-                        
+
                         HStack {
                             NavigationLink(destination: CasualView()) {
-                                StyleSelectorButton(title: "Casual", imageName: "tshirt.fill", color: .green)
+                                StyleSelectorButton(title: "Casual", imageName: "tshirt.fill", color: Color(red: 0.08, green: 0.42, blue: 0.50))
                             }
                             Text("This is used for casual clothing and something you might wear for a nice dinner out. \n BETA")
                         }
-                        
+
                         //lounge view (not finished)
                         HStack {
                             NavigationLink(destination: LoungeView()) {
-                                StyleSelectorButton(title: "Lounge", imageName: "bed.double.fill", color: .orange)
+                                StyleSelectorButton(title: "Lounge", imageName: "bed.double.fill", color: Color(red: 0.50, green: 0.25, blue: 0.10))
                             }
                             Text("If you're deciding what to wear on a rainy day or at the movie theater, this is for you. \n BETA")
-                        }
-                        //navigagtion link to content view
-                        
-                        NavigationLink(destination: ContentView()) {
-                            HStack(spacing: 10) {
-                                Image(systemName: "arrowshape.backward")
-                                    .foregroundColor(.white)
-                                    .imageScale(.medium)
-                                
-                                Text("Back")
-                                    .font(.headline)
-                                    .foregroundColor(.white)
-                            }
-                            .frame(width: 200)
-                            .background(Color.red)
-                            .cornerRadius(10)
                         }
                     }
                     .padding(.horizontal)
                     .navigationTitle("Choose Your Style")
-                    .navigationBarBackButtonHidden(true)
                 }
-                //hides naviagtion bar so the user doesn't get 2 backbuttons (saves animation(sort of))
-                
+
                 Spacer()
-                
+
             }
             .navigationTitle("Choose Your Style")
-            .navigationBarBackButtonHidden(true)
         }
     }
     

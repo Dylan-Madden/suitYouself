@@ -36,7 +36,7 @@ struct ColorSelectionView: View {
             }
             .padding()
             //.frame(maxWidth: .infinity)
-            .background(Color.green)
+            .background(Color(red: 0.18, green: 0.25, blue: 0.50))
             .foregroundColor(.white)
             .cornerRadius(12)
             .padding(.horizontal)

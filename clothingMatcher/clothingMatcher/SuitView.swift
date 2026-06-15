@@ -110,7 +110,7 @@ struct SuitView: View {
             .multilineTextAlignment(.center)
             .padding()
             .frame(maxWidth: 200)
-            .background(Color.green)
+            .background(Color(red: 0.18, green: 0.25, blue: 0.50))
             .foregroundColor(.white)
             .cornerRadius(10)
             .padding(.top, 720)
