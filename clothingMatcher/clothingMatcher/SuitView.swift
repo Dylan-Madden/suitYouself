@@ -1,96 +1,87 @@
 import SwiftUI
 import UIKit
 
-//main view that is the bulk of the project. allows the user to customize a suit by chosing colors for each part of the sut
 struct SuitView: View {
-    @State private var selectedType: ClothingType? = nil     // currently tapped clothing type
-    @State private var colors: [ClothingType: Color] = [:]   // stores selected colors by clothing type
-    @State private var feedbackText: String = ""             // feedback returned by openAI
-    @State private var showFeedbackView = false              // whether to display feedback overlay whcih can toggle
-
-
+    @State private var selectedType: ClothingType? = nil
+    @State private var colors: [ClothingType: Color] = [:]
+    @State private var feedbackText: String = ""
+    @State private var showFeedbackView = false
 
     var body: some View {
         ZStack {
-            //simplier background which is more boring
-            LinearGradient(colors: [Color.suitViewStart.opacity(0.7), Color.suitViewEnd.opacity(0.7)],startPoint: .top,endPoint: .bottom).ignoresSafeArea()
-            //instructions and header
+            LinearGradient(colors: [Color.suitViewStart.opacity(0.7), Color.suitViewEnd.opacity(0.7)], startPoint: .top, endPoint: .bottom).ignoresSafeArea()
+
             Text("Build your outfit")
                 .padding(.bottom, 740)
                 .font(.title)
                 .frame(maxWidth: .infinity)
                 .foregroundStyle(.black)
                 .multilineTextAlignment(.center)
+
             Text("Build your outfit by tapping on parts of the suit. Then choose the color of each clothing item. When you are satisfied with your choices, tap \"Submit Outfit\" to get color matching advice.")
-            
-                
                 .font(.headline)
                 .padding(.bottom, 600)
                 .foregroundStyle(.black)
                 .multilineTextAlignment(.center)
-            
-            //suit layer images that are ech individually mutable
-            //all images start clear although the user can still pick an item to be the same color as the background
-            //should i have the default color be something different?
-            Image("blazerTake5")
-                .renderingMode(.template)
-                .resizable()
-                .scaledToFit()
-                .foregroundColor(colors[.blazer] ?? .clear)
-            
-            Image("shirtTake5")
-                .renderingMode(.template)
-                .resizable()
-                .scaledToFit()
-                .foregroundColor(colors[.shirt] ?? .clear)
-            
-            Image("pantsTake5")
-                .renderingMode(.template)
-                .resizable()
-                .scaledToFit()
-                .foregroundColor(colors[.pants] ?? .clear)
-            
-            Image("tieTake5")
-                .renderingMode(.template)
-                .resizable()
-                .scaledToFit()
-                .foregroundColor(colors[.tie] ?? .clear)
-            
-            Image("shoesTake5")
-                .renderingMode(.template)
-                .resizable()
-                .scaledToFit()
-                .foregroundColor(colors[.shoes] ?? .clear)
-            
-            Image("beltTake5")
-                .renderingMode(.template)
-                .resizable()
-                .scaledToFit()
-                .foregroundColor(colors[.belt] ?? .clear)
-            
-            Image("outlineTake5")
-                .renderingMode(.template)
-                .resizable()
-                .scaledToFit()
-                .foregroundColor(.black)
-            
-            
-            
-            //transparent clickable zones for user interaction
-            // in the future i want to make it so that the image is clickable but i don't really know how to and the feedback online is harder to understand
-            //using speicifc coordinates causes for slight clicking errors on smaller phones
-            tapZone(for: .blazer, x: 200, y: 280, width: 220, height: 260)
-            tapZone(for: .shirt, x: 200, y: 250, width: 70, height: 200)
-            tapZone(for: .tie, x: 200, y: 250, width: 30, height: 130)
-            tapZone(for: .pants, x: 200, y: 505, width: 160, height: 190)
-            tapZone(for: .belt, x: 200, y: 345, width: 60, height: 20)
-            tapZone(for: .shoes, x: 200, y: 620, width: 220, height: 50)
-            
-            //the submit button to get the AI feedback
+
+            GeometryReader { geometry in
+                ZStack {
+                    Image("blazerTake5")
+                        .renderingMode(.template)
+                        .resizable()
+                        .scaledToFit()
+                        .foregroundColor(colors[.blazer] ?? .clear)
+
+                    Image("shirtTake5")
+                        .renderingMode(.template)
+                        .resizable()
+                        .scaledToFit()
+                        .foregroundColor(colors[.shirt] ?? .clear)
+
+                    Image("pantsTake5")
+                        .renderingMode(.template)
+                        .resizable()
+                        .scaledToFit()
+                        .foregroundColor(colors[.pants] ?? .clear)
+
+                    Image("tieTake5")
+                        .renderingMode(.template)
+                        .resizable()
+                        .scaledToFit()
+                        .foregroundColor(colors[.tie] ?? .clear)
+
+                    Image("shoesTake5")
+                        .renderingMode(.template)
+                        .resizable()
+                        .scaledToFit()
+                        .foregroundColor(colors[.shoes] ?? .clear)
+
+                    Image("beltTake5")
+                        .renderingMode(.template)
+                        .resizable()
+                        .scaledToFit()
+                        .foregroundColor(colors[.belt] ?? .clear)
+
+                    Image("outlineTake5")
+                        .renderingMode(.template)
+                        .resizable()
+                        .scaledToFit()
+                        .foregroundColor(.black)
+                }
+                .frame(width: geometry.size.width, height: geometry.size.height)
+                .contentShape(Rectangle())
+                .onTapGesture { location in
+                    if let type = hitTest(at: location, in: geometry.size) {
+                        selectedType = type
+                        print("Tapped: \(type.rawValue)")
+                    }
+                }
+            }
+
             Button("Submit Outfit") {
                 let description = generateOutfitDescription(from: colors)
                 print("outfit description:\n\(description)")
-                
+
                 getOutfitFeedback(from: description) { feedback in
                     DispatchQueue.main.async {
                         if let feedback = feedback {
@@ -98,15 +89,12 @@ struct SuitView: View {
                             print(feedback)
                             self.showFeedbackView = true
                         } else {
-                            self.feedbackText = "Sorry, couldn’t get feedback right now."
+                            self.feedbackText = "Sorry, couldn't get feedback right now."
                             self.showFeedbackView = true
                         }
                     }
                 }
             }
-        
-            
-            
             .multilineTextAlignment(.center)
             .padding()
             .frame(maxWidth: 200)
@@ -115,13 +103,10 @@ struct SuitView: View {
             .cornerRadius(10)
             .padding(.top, 720)
             .font(.title)
-        
-        
-            //what will pop up as a view when the show feedback is turned on. I originally had it as a seperate view but I wanted the suit to slighlty peek in the background of the feedback
+
             if showFeedbackView {
                 ZStack {
-                    //gradient backgorund with 95% opacity to allow the user to slightly see the suit
-                    LinearGradient(colors: [Color.gradientStart.opacity(0.95),Color.gradientEnd.opacity(0.95)],startPoint: .top,endPoint: .bottom).ignoresSafeArea()
+                    LinearGradient(colors: [Color.gradientStart.opacity(0.95), Color.gradientEnd.opacity(0.95)], startPoint: .top, endPoint: .bottom).ignoresSafeArea()
 
                     VStack(spacing: 30) {
                         ScrollView {
@@ -142,10 +127,8 @@ struct SuitView: View {
                     .padding()
                 }
             }
-
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        //sheet for the selected clothing item that brings the color picker
         .sheet(item: $selectedType) { type in
             ColorSelectionView(
                 type: type,
@@ -156,22 +139,64 @@ struct SuitView: View {
             }
         }
     }
-    
 
-    //this is the individual tapzone for each button that is clickable.
-    private func tapZone(for type: ClothingType, x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat) -> some View {
-        Button {
-            selectedType = type
-            print("Tapped: \(type.rawValue)")
-        } label: {
-            Rectangle()
-                .fill(Color.clear) //color.red.opacity(0.3) for debugging
-                .frame(width: width, height: height)
+    // Checks each clothing layer in priority order (smallest/thinnest first) and returns
+    // the first type whose pixel at the tap location is non-transparent.
+    private func hitTest(at tapPoint: CGPoint, in frameSize: CGSize) -> ClothingType? {
+        guard let referenceImage = UIImage(named: "outlineTake5") else { return nil }
+        let imageSize = referenceImage.size
+
+        let scale = min(frameSize.width / imageSize.width, frameSize.height / imageSize.height)
+        let offsetX = (frameSize.width - imageSize.width * scale) / 2
+        let offsetY = (frameSize.height - imageSize.height * scale) / 2
+        let imagePoint = CGPoint(
+            x: (tapPoint.x - offsetX) / scale,
+            y: (tapPoint.y - offsetY) / scale
+        )
+
+        let priority: [(ClothingType, String)] = [
+            (.belt,   "beltTake5"),
+            (.tie,    "tieTake5"),
+            (.shoes,  "shoesTake5"),
+            (.shirt,  "shirtTake5"),
+            (.pants,  "pantsTake5"),
+            (.blazer, "blazerTake5"),
+        ]
+
+        for (type, imageName) in priority {
+            if isPixelOpaque(imageName: imageName, at: imagePoint) {
+                return type
+            }
         }
-        .position(x: x, y: y)
+        return nil
     }
-    
-    //generated a text of the current outfit that is easier for the AI to read.
+
+    // Renders a single 1×1 CGContext at the target coordinate and checks the alpha channel.
+    private func isPixelOpaque(imageName: String, at point: CGPoint) -> Bool {
+        guard let uiImage = UIImage(named: imageName) else { return false }
+        let size = uiImage.size
+        guard point.x >= 0, point.y >= 0, point.x < size.width, point.y < size.height else { return false }
+
+        var pixel = [UInt8](repeating: 0, count: 4)
+        let colorSpace = CGColorSpaceCreateDeviceRGB()
+        guard let context = CGContext(
+            data: &pixel,
+            width: 1, height: 1,
+            bitsPerComponent: 8,
+            bytesPerRow: 4,
+            space: colorSpace,
+            bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue
+        ) else { return false }
+
+        // Translate so the target pixel's center lands at context (0.5, 0.5).
+        // CG y-axis is flipped relative to UIImage: CG y = size.height - UIImage y.
+        context.translateBy(x: -point.x, y: point.y - size.height + 1)
+        if let cgImage = uiImage.cgImage {
+            context.draw(cgImage, in: CGRect(origin: .zero, size: size))
+        }
+        return pixel[3] > 0
+    }
+
     func generateOutfitDescription(from colors: [ClothingType: Color]) -> String {
         let orderedTypes: [ClothingType] = [.shirt, .blazer, .tie, .pants, .belt, .shoes]
         var result = ""
@@ -188,11 +213,8 @@ struct SuitView: View {
 
         return result
     }
-    
 }
 
-//converts the swiftui color into a hex code that makes open ai input a lot smoother. open ai kept on glitching when i didn't convert it to a hex.
-//converting to hex was a function that was heaily based on mutiple reddit posts and stackover threads.
 extension Color {
     func toHex() -> String? {
         let uiColor = UIColor(self)
@@ -210,5 +232,3 @@ extension Color {
 #Preview {
     SuitView()
 }
-
-
