@@ -33,16 +33,16 @@ struct CasualView: View {
                     GeometryReader { geometry in
                         ZStack {
                             templateImage("casualTshirt", color: colors[.tshirt] ?? .white)
-                            templateImage("casualPants",  color: colors[.pants]  ?? .clear)
-                            templateImage("casualShoes",  color: colors[.shoes]  ?? .clear)
+                            templateImage("casualPants",  color: colors[.pants]  ?? .white)
+                            templateImage("casualShoes",  color: colors[.shoes]  ?? .white)
 
-                            if showBelt    { templateImage("casualBelt",    color: colors[.belt]    ?? .clear) }
+                            if showBelt    { templateImage("casualBelt",    color: colors[.belt]    ?? .white) }
                             if showGlasses { templateImage("casualGlasses", color: colors[.glasses] ?? .white) }
 
                             if wearingHat {
-                                templateImage("casualHat",  color: colors[.hat]  ?? .clear)
+                                templateImage("casualHat",  color: colors[.hat]  ?? .white)
                             } else {
-                                templateImage("casualHair", color: colors[.hair] ?? .clear)
+                                templateImage("casualHair", color: colors[.hair] ?? .white)
                             }
 
                             templateImage("casualOutline", color: .black)
