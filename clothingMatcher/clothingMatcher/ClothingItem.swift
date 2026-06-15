@@ -18,9 +18,11 @@ enum ClothingType: String, CaseIterable {
     case shirt, pants, blazer, tie, shoes, belt
 }
 
-/// make clothingtype indentifiable for usage
 extension ClothingType: Identifiable {
-    var id: String {
-        rawValue
-    }
+    var id: String { rawValue }
+}
+
+enum CasualClothingType: String, CaseIterable, Identifiable {
+    case tshirt, pants, shoes, belt, glasses, hat, hair
+    var id: String { rawValue }
 }

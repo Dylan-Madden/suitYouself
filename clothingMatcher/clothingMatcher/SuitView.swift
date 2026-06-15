@@ -11,98 +11,96 @@ struct SuitView: View {
         ZStack {
             LinearGradient(colors: [Color.suitViewStart.opacity(0.7), Color.suitViewEnd.opacity(0.7)], startPoint: .top, endPoint: .bottom).ignoresSafeArea()
 
-            Text("Build your outfit")
-                .padding(.bottom, 740)
-                .font(.title)
-                .frame(maxWidth: .infinity)
-                .foregroundStyle(.black)
-                .multilineTextAlignment(.center)
+            VStack(spacing: 0) {
+                VStack(spacing: 8) {
+                    Text("Build your outfit")
+                        .font(.title)
+                        .foregroundStyle(.black)
 
-            Text("Build your outfit by tapping on parts of the suit. Then choose the color of each clothing item. When you are satisfied with your choices, tap \"Submit Outfit\" to get color matching advice.")
-                .font(.headline)
-                .padding(.bottom, 600)
-                .foregroundStyle(.black)
-                .multilineTextAlignment(.center)
-
-            GeometryReader { geometry in
-                ZStack {
-                    Image("blazerTake5")
-                        .renderingMode(.template)
-                        .resizable()
-                        .scaledToFit()
-                        .foregroundColor(colors[.blazer] ?? .clear)
-
-                    Image("shirtTake5")
-                        .renderingMode(.template)
-                        .resizable()
-                        .scaledToFit()
-                        .foregroundColor(colors[.shirt] ?? .clear)
-
-                    Image("pantsTake5")
-                        .renderingMode(.template)
-                        .resizable()
-                        .scaledToFit()
-                        .foregroundColor(colors[.pants] ?? .clear)
-
-                    Image("tieTake5")
-                        .renderingMode(.template)
-                        .resizable()
-                        .scaledToFit()
-                        .foregroundColor(colors[.tie] ?? .clear)
-
-                    Image("shoesTake5")
-                        .renderingMode(.template)
-                        .resizable()
-                        .scaledToFit()
-                        .foregroundColor(colors[.shoes] ?? .clear)
-
-                    Image("beltTake5")
-                        .renderingMode(.template)
-                        .resizable()
-                        .scaledToFit()
-                        .foregroundColor(colors[.belt] ?? .clear)
-
-                    Image("outlineTake5")
-                        .renderingMode(.template)
-                        .resizable()
-                        .scaledToFit()
-                        .foregroundColor(.black)
+                    Text("Tap parts of the suit to choose colors. When you're happy with your choices, tap \"Submit Outfit\" for AI color matching advice.")
+                        .font(.headline)
+                        .foregroundStyle(.black)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal)
                 }
-                .frame(width: geometry.size.width, height: geometry.size.height)
-                .contentShape(Rectangle())
-                .onTapGesture { location in
-                    if let type = hitTest(at: location, in: geometry.size) {
-                        selectedType = type
-                        print("Tapped: \(type.rawValue)")
+                .padding(.top)
+                .padding(.bottom, 8)
+
+                GeometryReader { geometry in
+                    ZStack {
+                        Image("blazerTake5")
+                            .renderingMode(.template)
+                            .resizable()
+                            .scaledToFit()
+                            .foregroundColor(colors[.blazer] ?? .clear)
+
+                        Image("shirtTake5")
+                            .renderingMode(.template)
+                            .resizable()
+                            .scaledToFit()
+                            .foregroundColor(colors[.shirt] ?? .clear)
+
+                        Image("pantsTake5")
+                            .renderingMode(.template)
+                            .resizable()
+                            .scaledToFit()
+                            .foregroundColor(colors[.pants] ?? .clear)
+
+                        Image("tieTake5")
+                            .renderingMode(.template)
+                            .resizable()
+                            .scaledToFit()
+                            .foregroundColor(colors[.tie] ?? .clear)
+
+                        Image("shoesTake5")
+                            .renderingMode(.template)
+                            .resizable()
+                            .scaledToFit()
+                            .foregroundColor(colors[.shoes] ?? .clear)
+
+                        Image("beltTake5")
+                            .renderingMode(.template)
+                            .resizable()
+                            .scaledToFit()
+                            .foregroundColor(colors[.belt] ?? .clear)
+
+                        Image("outlineTake5")
+                            .renderingMode(.template)
+                            .resizable()
+                            .scaledToFit()
+                            .foregroundColor(.black)
+                    }
+                    .frame(width: geometry.size.width, height: geometry.size.height)
+                    .contentShape(Rectangle())
+                    .onTapGesture { location in
+                        if let type = hitTest(at: location, in: geometry.size) {
+                            selectedType = type
+                            print("Tapped: \(type.rawValue)")
+                        }
                     }
                 }
-            }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
 
-            Button("Submit Outfit") {
-                let description = generateOutfitDescription(from: colors)
-                print("outfit description:\n\(description)")
+                Button("Submit Outfit") {
+                    let description = generateOutfitDescription(from: colors)
+                    print("outfit description:\n\(description)")
 
-                getOutfitFeedback(from: description) { feedback in
-                    DispatchQueue.main.async {
-                        if let feedback = feedback {
-                            self.feedbackText = feedback
-                            print(feedback)
-                            self.showFeedbackView = true
-                        } else {
-                            self.feedbackText = "Sorry, couldn't get feedback right now."
+                    getOutfitFeedback(from: description) { feedback in
+                        DispatchQueue.main.async {
+                            self.feedbackText = feedback ?? "Sorry, couldn't get feedback right now."
                             self.showFeedbackView = true
                         }
                     }
                 }
+                .font(.title2)
+                .padding()
+                .frame(maxWidth: .infinity)
+                .background(Color(red: 0.18, green: 0.25, blue: 0.50))
+                .foregroundColor(.white)
+                .cornerRadius(12)
+                .padding(.horizontal, 40)
+                .padding(.vertical, 12)
             }
-            .multilineTextAlignment(.center)
-            .padding()
-            .frame(maxWidth: 200)
-            .background(Color(red: 0.18, green: 0.25, blue: 0.50))
-            .foregroundColor(.white)
-            .cornerRadius(10)
-            .padding(.top, 720)
-            .font(.title)
 
             if showFeedbackView {
                 ZStack {
@@ -131,7 +129,7 @@ struct SuitView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .sheet(item: $selectedType) { type in
             ColorSelectionView(
-                type: type,
+                label: type.rawValue.capitalized,
                 startingColor: colors[type] ?? .gray
             ) { selectedColor in
                 colors[type] = selectedColor
@@ -140,8 +138,6 @@ struct SuitView: View {
         }
     }
 
-    /// Checks each clothing layer in priority order (smallest/thinnest first) and returns
-    /// the first type whose pixel at the tap location is non-transparent.
     private func hitTest(at tapPoint: CGPoint, in frameSize: CGSize) -> ClothingType? {
         guard let referenceImage = UIImage(named: "outlineTake5") else { return nil }
         let imageSize = referenceImage.size
@@ -155,11 +151,11 @@ struct SuitView: View {
         )
 
         let priority: [(ClothingType, String)] = [
-            (.belt, "beltTake5"),
-            (.tie, "tieTake5"),
-            (.shoes, "shoesTake5"),
-            (.shirt, "shirtTake5"),
-            (.pants, "pantsTake5"),
+            (.belt,   "beltTake5"),
+            (.tie,    "tieTake5"),
+            (.shoes,  "shoesTake5"),
+            (.shirt,  "shirtTake5"),
+            (.pants,  "pantsTake5"),
             (.blazer, "blazerTake5"),
         ]
 
@@ -171,7 +167,6 @@ struct SuitView: View {
         return nil
     }
 
-    /// Renders a single 1×1 CGContext at the target coordinate and checks the alpha channel.
     private func isPixelOpaque(imageName: String, at point: CGPoint) -> Bool {
         guard let uiImage = UIImage(named: imageName) else { return false }
         let size = uiImage.size
@@ -188,8 +183,7 @@ struct SuitView: View {
             bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue
         ) else { return false }
 
-        // Translate so the target pixel's center lands at context (0.5, 0.5).
-        // CG y-axis is flipped relative to UIImage: CG y = size.height - UIImage y.
+        // CG y-axis is flipped relative to UIImage: translate so target pixel lands at context (0.5, 0.5).
         context.translateBy(x: -point.x, y: point.y - size.height + 1)
         if let cgImage = uiImage.cgImage {
             context.draw(cgImage, in: CGRect(origin: .zero, size: size))
@@ -199,19 +193,11 @@ struct SuitView: View {
 
     func generateOutfitDescription(from colors: [ClothingType: Color]) -> String {
         let orderedTypes: [ClothingType] = [.shirt, .blazer, .tie, .pants, .belt, .shoes]
-        var result = ""
-
-        for type in orderedTypes {
-            if let color = colors[type], let hex = color.toHex() {
-                let typeName = type.rawValue.capitalized
-                result += "\(typeName): \(hex)\n"
-            } else {
-                let typeName = type.rawValue.capitalized
-                result += "\(typeName): Not selected\n"
-            }
-        }
-
-        return result
+        return orderedTypes.map { type in
+            let name = type.rawValue.capitalized
+            if let hex = colors[type]?.toHex() { return "\(name): \(hex)" }
+            return "\(name): Not selected"
+        }.joined(separator: "\n")
     }
 }
 
@@ -220,12 +206,7 @@ extension Color {
         let uiColor = UIColor(self)
         var red: CGFloat = 0, green: CGFloat = 0, blue: CGFloat = 0, alpha: CGFloat = 0
         guard uiColor.getRed(&red, green: &green, blue: &blue, alpha: &alpha) else { return nil }
-
-        let r = Int(red * 255)
-        let g = Int(green * 255)
-        let b = Int(blue * 255)
-
-        return String(format: "#%02X%02X%02X", r, g, b)
+        return String(format: "#%02X%02X%02X", Int(red * 255), Int(green * 255), Int(blue * 255))
     }
 }
 

@@ -1,17 +1,15 @@
 import SwiftUI
 
-/// view of user picking the color of an item
 struct ColorSelectionView: View {
-    var type: ClothingType // clothing type
-    var startingColor: Color // always starts blank
+    var label: String
+    var startingColor: Color
     var onColorPicked: (Color) -> Void
 
-    @Environment(\.dismiss) var dismiss // to dismiss the view
-    @State private var selectedColor: Color // picked color
+    @Environment(\.dismiss) var dismiss
+    @State private var selectedColor: Color
 
-    /// initializes all the vars (completion handler)
-    init(type: ClothingType, startingColor: Color, onColorPicked: @escaping (Color) -> Void) {
-        self.type = type
+    init(label: String, startingColor: Color, onColorPicked: @escaping (Color) -> Void) {
+        self.label = label
         self.startingColor = startingColor
         self.onColorPicked = onColorPicked
         _selectedColor = State(initialValue: startingColor)
@@ -19,23 +17,20 @@ struct ColorSelectionView: View {
 
     var body: some View {
         VStack(spacing: 30) {
-            Text("Choose a color for your \(type.rawValue.capitalized)")
+            Text("Choose a color for your \(label)")
                 .font(.title)
                 .padding(.top)
 
-            // color pciker
             ColorPicker("Select color", selection: $selectedColor, supportsOpacity: false)
                 .labelsHidden()
                 .scaleEffect(1.5)
                 .padding()
 
-            // save button that triggers the callback and dismisses the whole view and brings user back to the suit
             Button("Save Color") {
                 onColorPicked(selectedColor)
                 dismiss()
             }
             .padding()
-            // .frame(maxWidth: .infinity)
             .background(Color(red: 0.18, green: 0.25, blue: 0.50))
             .foregroundColor(.white)
             .cornerRadius(12)
